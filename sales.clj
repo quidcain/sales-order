@@ -16,3 +16,14 @@
    :name name
    :address address
    :phoneNumber phoneNumber})
+(defn parse-prod
+  [[prodID itemDescription unitCost]]
+  {:prodID (read-string prodID)
+   :itemDescription itemDescription
+   :unitCost (read-string unitCost)})
+(defn parse-sales
+  [[salesID custID prodID itemCount]]
+  {:salesID (read-string salesID)
+   :custID (read-string custID)
+   :prodID (read-string prodID)
+   :itemCount (read-string itemCount)})
