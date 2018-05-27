@@ -58,3 +58,26 @@
                  (:name (first (filter #(= (:custID %)(:custID sale)) customers)))
                  (:itemDescription (first (filter #(= (:prodID %)(:prodID sale)) products)))
                  (:itemCount sale)))))
+
+(defn- get-cust-by-name
+  [name customers]
+  (first (filter #(= (:name %) name) customers)))
+
+(defn- get-sales-by-cust
+  [customer sales]
+  (filter #(= (:custID customer)
+              (:custID %))
+           sales))
+(defn- get-prod-by-sale
+  [sale prods]
+  (first (filter #(= (:prodID sale)
+                     (:prodID %))
+                 prods)))
+
+(defn total-sales-by-custName
+  [customer-name customers products sales]
+  (reduce + 0 (for [sale (-> customer-name
+                             (get-cust-by-name customers)
+                             (get-sales-by-cust sales))]
+                (* (:unitCost (get-prod-by-sale sale products) 0)
+                   (:itemCount sale 0)))))
