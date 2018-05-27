@@ -27,3 +27,8 @@
    :custID (read-string custID)
    :prodID (read-string prodID)
    :itemCount (read-string itemCount)})
+
+
+(def customers (sort-by :custID (map parse-cust (slurp-and-parse "cust.txt"))))
+(def products (sort-by :prodID (map parse-prod (slurp-and-parse "prod.txt"))))
+(def sales (sort-by :salesID (map parse-sales (slurp-and-parse "sales.txt"))))
