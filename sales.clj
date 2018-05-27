@@ -81,3 +81,20 @@
                              (get-sales-by-cust sales))]
                 (* (:unitCost (get-prod-by-sale sale products) 0)
                    (:itemCount sale 0)))))
+
+(defn- get-prod-by-desc
+  [prodDesc products]
+  (first (filter #(= (:itemDescription %) prodDesc) products)))
+(defn- get-sales-by-prod
+  [product sales]
+  (filter #(= (:prodID product)
+              (:prodID %))
+          sales))
+
+(defn total-sales-by-prodDesc
+  [prodDesc products sales]
+  (->> (-> prodDesc
+           (get-prod-by-desc products)
+           (get-sales-by-prod sales))
+       (map :itemCount)
+       (reduce + 0)))
