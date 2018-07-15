@@ -35,7 +35,7 @@
 
 (defn display-cust-table
   [customers]
-  (for [customer customers]
+  (doseq [customer customers]
     (println (format "%d: [\"%s\" \"%s\" \"%s\"]"
                  (:custID customer)
                  (:name customer)
@@ -44,7 +44,7 @@
 
 (defn display-prod-table
   [products]
-  (for [product products]
+  (doseq [product products]
     (println (format "%d: [\"%s\" \"%s\"]"
                  (:prodID product)
                  (:itemDescription product)
@@ -52,7 +52,7 @@
 
 (defn display-sales-table
   [sales customers products]
-  (for [sale sales]
+  (doseq [sale sales]
     (println (format "%d: [\"%s\" \"%s\" \"%d\"]"
                  (:salesID sale) 
                  (:name (first (filter #(= (:custID %)(:custID sale)) customers)))
@@ -98,3 +98,39 @@
            (get-sales-by-prod sales))
        (map :itemCount)
        (reduce + 0)))
+
+(defn- handle-4
+  [customers products sales]
+  (println "Enter customer's name")
+  (let [name (read-line)]
+    (println (str name ": $"(total-sales-by-custName name customers products sales)))))
+
+(defn- handle-5
+  [products sales]
+  (println "Enter product's description")
+  (let [prodDesc (read-line)]
+    (println (str prodDesc ": "(total-sales-by-prodDesc prodDesc products sales)))))
+
+(defn main
+  []
+  (println "
+*** Sales Menu ***
+------------------
+1. Display Customer Table
+2. Display Product Table
+3. Display Sales Table
+4. Total Sales for Customer
+5. Total Count for Product
+6. Exit
+Enter an option?")
+  (let [input (read-string (read-line))]
+    (case input
+      1 (display-cust-table customers)
+      2 (display-prod-table products)
+      3 (display-sales-table sales customers products)
+      4 (handle-4 customers products sales)
+      5 (handle-5 products sales)
+      6 (println "Good Bye")
+      "")
+    (if (not= 6 input)
+      (recur))))
